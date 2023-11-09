@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <locale.h>
 
 typedef struct Pilha Pilha;
 typedef struct Numero Numero;
@@ -26,12 +27,16 @@ void clear(Pilha* p);
 int isEmpty(Pilha* p);
 void push(Pilha* p, Numero* num);
 void pop(Pilha* p);
-void topEl(Pilha* p);
+Numero* topEl(Pilha* p);
+
+void listarNumeros(Pilha* p);
 
 //===============
 
 int main()
 {
+    setlocale(LC_ALL, "");
+
     Pilha* p = new_pilha();
 
     printf("Pilha inicializada!\n");
@@ -48,23 +53,19 @@ int main()
 
     printf("Numeros empilhados!\n");
 
-    p->LNumAux = p->LNumInicio.next;
-    while (p->LNumAux)
-    {
-        printf("Num: %d\n", p->LNumAux->num);
+    listarNumeros(p);
 
-        p->LNumAux = p->LNumAux->next;
-    }
+    printf("Lista vazia? :%d\n", isEmpty(p));
+    printf("Elemento do topo é: %d\n", topEl(p)->num);
+
+    pop(p);
+    printf("Elemento do topo é: %d\n", topEl(p)->num);
 
     clear(p);
 
-    p->LNumAux = p->LNumInicio.next;
-    while (p->LNumAux)
-    {
-        printf("Num: %d\n", p->LNumAux->num);
+    listarNumeros(p);
 
-        p->LNumAux = p->LNumAux->next;
-    }
+    printf("Lista vazia? :%d\n", isEmpty(p));
 
     return 0;
 }
@@ -109,7 +110,7 @@ void push(Pilha* p, Numero* num)
     if (!p) return;
 
     //p->LNumAux = p->LNumInicio.next;
-    if (p->LNumTop->next != NULL)
+    while (p->LNumTop->next != NULL)
     {
         // Manda Top para o fim da pilha
         p->LNumTop = p->LNumTop->next;
@@ -119,6 +120,56 @@ void push(Pilha* p, Numero* num)
     p->LNumTop->next = num;
     p->LNumTop = p->LNumTop->next;
     p->LNumTop->next = NULL;
+}
+
+void pop(Pilha* p)
+{
+    p->LNumAux = p->LNumInicio.next;
+
+    while (p->LNumAux->next != p->LNumTop)
+    {
+        // Manda Aux para para antes de Top
+        p->LNumAux = p->LNumAux->next;
+    }
+
+    //Top é liberado
+    free(p->LNumTop);
+
+    //Top torna-se Aux
+    p->LNumAux->next = NULL;
+    p->LNumTop = p->LNumAux;
+
+}
+
+Numero* topEl(Pilha* p)
+{
+    if (p->LNumTop)
+        return p->LNumTop;
+    else
+    {
+        printf("Não foi possível retornar o elemento do topo da pilha");
+        return NULL;
+    }
+}
+
+int isEmpty(Pilha* p)
+{
+    if (!p) return -1;
+
+    if (p->LNumInicio.next == NULL)
+        return 1;
+    else return 0;
+}
+
+void listarNumeros(Pilha* p)
+{
+    p->LNumAux = p->LNumInicio.next;
+    while (p->LNumAux)
+    {
+        printf("Num: %d\n", p->LNumAux->num);
+
+        p->LNumAux = p->LNumAux->next;
+    }
 }
 
 
