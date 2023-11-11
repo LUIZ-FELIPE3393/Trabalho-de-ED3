@@ -42,7 +42,6 @@ int main()
     Pilha op1, op2, res;
     op1.topEl = NULL;
     op2.topEl = NULL;
-    res.topEl = NULL;
 
     int num;
 
@@ -92,6 +91,8 @@ void push(Pilha* p, Algarismo* alg)
 
 void pop(Pilha* p)
 {
+    if (isEmpty(p))
+        return;
     Algarismo* temp = topEl(p);
     p->topEl = temp->next;
     free(temp);
@@ -159,11 +160,20 @@ void numero_para_algarismos(Pilha* p, int num)
 Pilha soma_numeros(Pilha* op1, Pilha* op2) // Retorna pilha do numero resultante
 {
     Pilha res;
+    res.topEl = NULL;
 
     char soma = 0;
     while (op1->topEl || op2->topEl)
     {
-        soma = soma + op1->topEl->valor + op2->topEl->valor;
+        int operando1 = 0, operando2 = 0;
+
+        if (!isEmpty(op1)) operando1 = op1->topEl->valor;
+        if (!isEmpty(op2)) operando2 = op2->topEl->valor;
+
+        soma = soma + operando1 + operando2;
+
+        pop(op1);
+        pop(op2);
 
         push(&res, new_algarismo(soma % 10));
 
