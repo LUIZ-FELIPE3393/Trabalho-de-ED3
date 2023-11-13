@@ -14,7 +14,7 @@ struct Algarismo
 
 struct Pilha
 {
-    //Pilha de algarismos que formam um número
+    //Pilha de algarismos que formam um nÃºmero
     Algarismo *topEl;
 };
 
@@ -104,7 +104,7 @@ Algarismo* topEl(Pilha* p)
         return p->topEl;
     else
     {
-        printf("ERRO - Não foi possível retornar o elemento do topo da pilha\n");
+        printf("ERRO - NÃ£o foi possÃ­vel retornar o elemento do topo da pilha\n");
         return NULL;
     }
 }
@@ -215,7 +215,6 @@ Pilha soma_numeros(Pilha* op1, Pilha* op2) // Retorna pilha do numero resultante
 
     system("cls");
     printf("\nFIM\n");*/
-
 
 
 
