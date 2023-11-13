@@ -57,6 +57,8 @@ int main()
     res = soma_numeros(&op1, &op2);
     listarAlgarismos(&res);
 
+    system("PAUSE");
+
     return 0;
 }
 
@@ -104,7 +106,7 @@ Algarismo* topEl(Pilha* p)
         return p->topEl;
     else
     {
-        printf("ERRO - NÃ£o foi possÃ­vel retornar o elemento do topo da pilha\n");
+        printf("ERRO - Não foi possí­vel retornar o elemento do topo da pilha\n");
         return NULL;
     }
 }

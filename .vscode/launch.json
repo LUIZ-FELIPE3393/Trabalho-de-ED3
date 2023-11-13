@@ -8,7 +8,7 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/main.exe",
+            "program": "${fileDirname}\\main.exe",
             "preLaunchTask": "C/C++: gcc.exe build active file",
             "args": [],
             "stopAtEntry": false,
