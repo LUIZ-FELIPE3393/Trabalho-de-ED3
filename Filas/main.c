@@ -21,11 +21,43 @@ struct Elemento
 void clear();
 char isEmpty();
 char isFull();
-
+void enqueue(Elemento* el);
+Elemento* dequeue();
+Elemento* firstEl();
 
 int main()
 {
-
+    
 
     return 0;
+}
+
+void clear()
+{
+
+}
+
+char isEmpty()
+{
+
+}
+
+char isFull()
+{
+
+}
+
+void enqueue(Elemento* el)
+{
+
+}
+
+Elemento* dequeue()
+{
+
+}
+
+Elemento* firstEl()
+{
+
 }
