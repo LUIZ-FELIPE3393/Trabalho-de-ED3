@@ -19,14 +19,14 @@ struct Elemento
     Elemento *next;
 };
 
+void converte_dados_em_pacotes(Fila*, char* dados);
+
 void clear(Fila*);
 char isEmpty(Fila*);
 char isFull(Fila*);
 void enqueue(Fila*, Elemento*);
 void dequeue(Fila*);
 Elemento* firstEl(Fila*);
-
-void converte_dados_em_pacotes(Fila*, char* dados);
 
 Fila* new_fila(int capacidade);
 Elemento* new_elemento(char* dados, int offset);
@@ -39,9 +39,15 @@ int main()
     return 0;
 }
 
-void clear(Fila* fila)
+void converte_dados_em_pacotes(Fila* fila, char* dados)
 {
 
+}
+
+void clear(Fila* fila)
+{
+    while(!isEmpty)
+        dequeue(fila);
 }
 
 char isEmpty(Fila* fila)
