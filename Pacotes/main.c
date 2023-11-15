@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-const int TAM_PACOTE = 16; // Em bytes
+#define TAM_PACOTE 16 // Em bytes
 
 typedef struct Fila Fila;
 typedef struct Elemento Elemento;
@@ -34,7 +34,15 @@ Elemento* new_elemento(char* dados, int offset);
 int main()
 {
     Fila* f = new_fila(8);
-    
+
+    char str[1024];
+    memset(str, 0, sizeof(str));
+
+    enqueue(f, new_elemento("aba", 0));
+    enqueue(f, new_elemento("abl", 0));
+    enqueue(f, new_elemento("abe", 0));
+
+    //scanf("%s", str);
 
     return 0;
 }
@@ -66,6 +74,8 @@ char isFull(Fila* fila)
 
 void enqueue(Fila* fila, Elemento* el)
 {
+    if (isFull(fila)) return;
+
     if (isEmpty(fila))
     {
         fila->firstEl = el;
@@ -96,6 +106,7 @@ Fila* new_fila(int capacidade)
 {
     Fila* new_fila = (Fila*) malloc(sizeof(Fila));
     new_fila->capacidade = capacidade;
+    new_fila->quant_elementos = 0;
     new_fila->lastEl = NULL;
     new_fila->firstEl = NULL;
     return new_fila;
@@ -106,5 +117,5 @@ Elemento* new_elemento(char* dado, int offset)
     Elemento* new_el = (Elemento*) malloc(sizeof(Elemento));
     memcpy(new_el->dado, dado[offset], sizeof(char)*TAM_PACOTE);
     new_el->next = NULL;
-    return new_el; 
+    return new_el;
 }
