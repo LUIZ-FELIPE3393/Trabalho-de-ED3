@@ -19,6 +19,7 @@ struct Algoritimo {
 Algoritimo *pAlgIni = NULL;
 Algoritimo *pAlgFim = NULL;
 
+//Funções de fila (FIFO)
 void clearAlg();
 int isEmpity();
 void enqueue(int num);
@@ -26,8 +27,10 @@ int dequeue();
 Algoritimo * firstEl();
 void isFull();
 Algoritimo * newAlg(int num);
+
+//Funções de Arquivos para pacotes
 void put_arq(Algoritimo *alg);
-//Algoritimo newAlg(int num);
+
 
 int main() {
     setlocale(LC_ALL,"");
@@ -35,13 +38,13 @@ int main() {
 
     do{
 
-        if(algSize < algSizeMax){
+        if(algSize < algSizeMax){ //Os três primeiros dados sem enviar o pacote.
             system("cls");
             printf("\nInserir dado númerico: ");
             scanf("%d", &num);
             enqueue(num);
         }
-        else if(algSize == algSizeMax){
+        else if(algSize == algSizeMax){//A partir do terceiro dado enviando o pacote(o primeiro da fila que vai ser enviado usando o dequeue).
             dequeue();
 
             system("cls");
@@ -106,7 +109,7 @@ int dequeue(){
     }
 
     Algoritimo *pAux = pAlgIni;
-    put_arq(pAux);
+    put_arq(pAux);//Envia o pacote(nó) pro arquivo;
     pAlgIni = pAux->pAnt;
     free(pAux);
 
@@ -151,7 +154,7 @@ Algoritimo * newAlg(int num){
 void put_arq(Algoritimo *alg){
     arq_ptr = fopen("pacotes.txt", "a");
 
-    fprintf(arq_ptr, "%d{%d}\n", arqSize, alg->algo);
+    fprintf(arq_ptr, "%d{%d}\n", arqSize, alg->algo);//envia pros arquivos os pacotes com dados numericos mais o indice de numeros de pacotes enviados
 
     fclose(arq_ptr);
     arqSize++;
