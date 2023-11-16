@@ -1,7 +1,0 @@
-# depslib dependency file v1.0
-1699656927 source:d:\salve_seus_arquivos_aqui\luiz_felipe\ed\trabalho-de-ed3\calculadora\main.c
-	<stdio.h>
-	<stdlib.h>
-	<locale.h>
-	<windows.h>
-
