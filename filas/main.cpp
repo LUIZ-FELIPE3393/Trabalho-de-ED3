@@ -19,7 +19,7 @@ struct Algoritimo {
 Algoritimo *pAlgIni = NULL;
 Algoritimo *pAlgFim = NULL;
 
-//FunÁıes de fila (FIFO)
+//Fun√ß√µes de fila (FIFO)
 void clearAlg();
 int isEmpity();
 void enqueue(int num);
@@ -30,7 +30,7 @@ Algoritimo * newAlg(int num);
 
 void visualizar_fila();
 
-//FunÁıes de Arquivos para pacotes
+//Fun√ß√µes de Arquivos para pacotes
 void put_arq(Algoritimo *alg);
 
 
@@ -55,11 +55,11 @@ void clearAlg(){
 int isEmpity(){
     setlocale(LC_ALL,"");
     if(pAlgIni == NULL){
-       //printf("\nFila est· vazia");
+       //printf("\nFila est√° vazia");
         return 1;
     }
     else{
-       //printf("\nFila n„o est· vazia");
+       //printf("\nFila n√£o est√° vazia");
         return 0;
     }
 
@@ -119,11 +119,11 @@ char isFull(){
     setlocale(LC_ALL,"");
 
     if(algSize == algSizeMax){
-        //printf("\nFila est· cheia");
+        //printf("\nFila est√° cheia");
         return 1;
     }
     else{
-        //printf("\nFila n„o est· cheia");
+        //printf("\nFila n√£o est√° cheia");
         return 0;
     }
 }
