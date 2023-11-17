@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <windows.h>
 
-#define TAM_PACOTE 16 // Em bytes
+#define TAM_PACOTE 8 // Em bytes
 
 typedef struct Fila Fila;
 typedef struct Elemento Elemento;
@@ -15,8 +16,8 @@ struct Fila
 
 struct Elemento
 {
-    char dado[TAM_PACOTE];
     Elemento *next;
+    char dado[TAM_PACOTE];
 };
 
 void converte_dados_em_pacotes(Fila*, char* dados);
@@ -28,33 +29,114 @@ void enqueue(Fila*, Elemento*);
 void dequeue(Fila*);
 Elemento* firstEl(Fila*);
 
+void visualizar_pacotes(Fila* f1, Fila* f2);
+void envia_pacotes(Fila* f1, Fila* f2);
+
 Fila* new_fila(int capacidade);
 Elemento* new_elemento(char* dados, int offset);
 
+void gotoxy(int x, int y){
+     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),(COORD){x-1,y-1});
+}
+
 int main()
 {
-    Fila* f = new_fila(8);
+    Fila* f1 = new_fila(12);
+    Fila* f2 = new_fila(12);
 
     char str[1024];
-    memset(str, 0, sizeof(str));
 
-    enqueue(f, new_elemento("aba", 0));
-    enqueue(f, new_elemento("abl", 0));
-    enqueue(f, new_elemento("abe", 0));
+    scanf("%[^\n]", str);
+    converte_dados_em_pacotes(f1, str);
 
-    //scanf("%s", str);
+    envia_pacotes(f1, f2);
+
+    gotoxy(1, 18);
 
     return 0;
 }
 
+void envia_pacotes(Fila* f1, Fila* f2)
+{
+    while(!isEmpty(f1))
+    {
+        Elemento* temp = new_elemento(firstEl(f1)->dado, 0);
+        dequeue(f1);
+
+        visualizar_pacotes(f1, f2);
+        visualizar_transf();
+
+        enqueue(f2, new_elemento(temp->dado, 0));
+    }
+}
+
 void converte_dados_em_pacotes(Fila* fila, char* dados)
 {
+    int num_pacotes = 1 + strlen(dados) / (TAM_PACOTE-1);
+    int memcpy_offset = 0;
 
+    for (int i = 0; i < num_pacotes; i++)
+    {
+        enqueue(fila, new_elemento(dados, memcpy_offset));
+        memcpy_offset += TAM_PACOTE-1;
+    }
+}
+
+void visualizar_transf()
+{
+    gotoxy(12, 2);
+    printf("======================");
+    gotoxy(12, 6);
+    printf("======================");
+
+    int i;
+    for (i = 0; i < 20; i++)
+    {
+        gotoxy((13 + i) - 1, 4);
+        printf(" ");
+        gotoxy(13 + i, 4);
+        printf("*");
+        Sleep(20);
+    }
+}
+
+void visualizar_pacotes(Fila* f1, Fila* f2)
+{
+    system("cls");
+    Elemento* el1 = f1->firstEl;
+    Elemento* el2 = f2->firstEl;
+    if (isEmpty(f1)) printf("*VAZIO*\n");
+    gotoxy(48, 1);
+    if (isEmpty(f2)) printf("*VAZIO*\n");
+
+    int i = 1;
+
+    while(el1 || el2)
+    {
+        if (el1)
+        {
+            gotoxy(1, i);
+            printf(">%s<", el1->dado);
+            el1 = el1->next;
+        }
+        if (el2)
+        {
+            gotoxy(48, i);
+            printf(">%s<", el2->dado);
+            el2 = el2->next;
+        }
+
+        i++;
+    }
+
+    if (isEmpty(f1)) printf("*CHEIO*\n");
+    gotoxy(48, 1);
+    if (isEmpty(f2)) printf("*CHEIO*\n");
 }
 
 void clear(Fila* fila)
 {
-    while(!isEmpty)
+    while(!isEmpty(fila))
         dequeue(fila);
 }
 
@@ -86,6 +168,7 @@ void enqueue(Fila* fila, Elemento* el)
         fila->lastEl->next = el;
         fila->lastEl = el;
     }
+    fila->quant_elementos++;
 }
 
 void dequeue(Fila* fila)
@@ -95,6 +178,7 @@ void dequeue(Fila* fila)
     Elemento* temp = fila->firstEl;
     fila->firstEl = temp->next;
     free(temp);
+    fila->quant_elementos--;
 }
 
 Elemento* firstEl(Fila* fila)
@@ -114,8 +198,16 @@ Fila* new_fila(int capacidade)
 
 Elemento* new_elemento(char* dado, int offset)
 {
+    char str[TAM_PACOTE] = "";
+
+    for (int i = 0; i < TAM_PACOTE; i++)
+    {
+        str[i] = dado[offset+i];
+    }
+    str[TAM_PACOTE-1] = '\0';
+
     Elemento* new_el = (Elemento*) malloc(sizeof(Elemento));
-    memcpy(new_el->dado, dado[offset], sizeof(char)*TAM_PACOTE);
+    strcpy(new_el->dado, str);
     new_el->next = NULL;
     return new_el;
 }
