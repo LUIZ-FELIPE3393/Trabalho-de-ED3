@@ -47,11 +47,15 @@ int main()
 
     char str[1024];
 
+    //Passo 1 - É pedido o dado a ser enviado pelo usuário
     fflush(stdin);
     printf("Digite o dado (string) a ser enviado:\n");
     scanf("%[^\n]", str);
+
+    //Passo 2 - O dado é convertido em vários pacotes
     converte_dados_em_pacotes(f1, str);
 
+    //Passo 3 - Os pacotes da primeira fila são enviados para a segunda
     envia_pacotes(f1, f2);
 
     gotoxy(1, 18);
@@ -64,27 +68,32 @@ int main()
 
 void envia_pacotes(Fila* f1, Fila* f2)
 {
+    visualizar_pacotes(f1, f2); // Exibe as duas filas em forma de coluna
+    visualizar_transf(); // Exibe o canal e a transferência dos dados
+
     while(!isEmpty(f1))
     {
         Elemento* temp = new_elemento(firstEl(f1)->dado, 0);
-        dequeue(f1);
+        dequeue(f1); // Retira o elemento da fila 1...
+        enqueue(f2, new_elemento(temp->dado, 0)); // E coloca na segunda
 
         visualizar_pacotes(f1, f2);
         visualizar_transf();
-
-        enqueue(f2, new_elemento(temp->dado, 0));
     }
+
+    visualizar_pacotes(f1, f2);
 }
 
 void converte_dados_em_pacotes(Fila* fila, char* dados)
 {
-    int num_pacotes = 1 + strlen(dados) / (TAM_PACOTE-1);
-    int memcpy_offset = 0;
+    int num_pacotes = 1 + strlen(dados) / (TAM_PACOTE-1); // Define o número de pacotes
+    int memcpy_offset = 0; // Define o índice caracter inicial da transferência de dados
 
-    for (int i = 0; i < num_pacotes; i++)
+	int i;
+    for (i = 0; i < num_pacotes; i++)
     {
-        enqueue(fila, new_elemento(dados, memcpy_offset));
-        memcpy_offset += TAM_PACOTE-1;
+        enqueue(fila, new_elemento(dados, memcpy_offset)); // Cria um novo pacote na fila enviando os dados recebidos do usuário e o índice do caracter inicial
+        memcpy_offset += TAM_PACOTE-1; // Atualiza o índice do caracter inicial
     }
 }
 
@@ -135,9 +144,9 @@ void visualizar_pacotes(Fila* f1, Fila* f2)
         i++;
     }
 
-    if (isEmpty(f1)) printf("*CHEIO*\n");
-    gotoxy(48, 1);
-    if (isEmpty(f2)) printf("*CHEIO*\n");
+    if (isFull(f1)) printf("\n*CHEIO*\n");
+    gotoxy(48, i);
+    if (isFull(f2)) printf("*CHEIO*\n");
 }
 
 void clear(Fila* fila)
@@ -162,7 +171,8 @@ char isFull(Fila* fila)
 
 void enqueue(Fila* fila, Elemento* el)
 {
-    if (isFull(fila)) return;
+    if (isFull(fila))
+        return;
 
     if (isEmpty(fila))
     {
@@ -204,16 +214,33 @@ Fila* new_fila(int capacidade)
 
 Elemento* new_elemento(char* dado, int offset)
 {
-    char str[TAM_PACOTE] = "";
+    char str[TAM_PACOTE] = ""; // Declara string
 
-    for (int i = 0; i < TAM_PACOTE; i++)
+	int i;
+    for (i = 0; i < TAM_PACOTE; i++) // Transfere os dados para string
     {
-        str[i] = dado[offset+i];
+        str[i] = dado[offset+i]; // Utiliza o índice offset junto ao índice do loop para enviar o char à string
     }
     str[TAM_PACOTE-1] = '\0';
 
-    Elemento* new_el = (Elemento*) malloc(sizeof(Elemento));
-    strcpy(new_el->dado, str);
-    new_el->next = NULL;
+    Elemento* new_el = (Elemento*) malloc(sizeof(Elemento)); // Aloca memória para novo elemento
+    strcpy(new_el->dado, str); // Insere os dados
+    new_el->next = NULL; // Define o ponteiro next como NULL
     return new_el;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
