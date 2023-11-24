@@ -133,7 +133,7 @@ void numero_para_algarismos(Pilha* p, int num)
 {
     int tam = 0, temp = num, dec, div;
 
-    while (temp > 0)
+    while (temp != 0)
     {
         tam++;
         temp = temp / 10;
@@ -179,6 +179,8 @@ Pilha soma_numeros(Pilha* op1, Pilha* op2) // Retorna pilha do numero resultante
 
         soma = soma / 10;
     }
+
+    if (soma > 0) push(&res, new_algarismo(soma));
 
     return res;
 }
